@@ -94,11 +94,24 @@ class  Footer extends  Component {
             //             } 
             //         )
             // }
-            logos = this.state.orderedLogos.map(({name, url}) => {
-                return <Logo key={name} alt={name} src={url}/>
-                } 
-            )
+
+            // PREE-S3 LOGOS MAPPING
+            // logos = this.state.orderedLogos.map(({name, url}) => {
+            //     return <Logo key={name} alt={name} src={url}/>
+            //     } 
+            // )
+            
+            /**S3 PARTNERS CONTENT */
+            if (this.props.content) {        
+                logos = this.props.content.partners.map(partner => {
+                    const name = partner.partner_name;
+                    const url = partner.partner_logo.guid;
+                    return <Logo key={name} alt={name} src={url}/>
+                    } 
+                )
+            }
             const { content } = this.props
+            console.log('FOOTER CONTENT', content)
             return (
                 <div id="footer">
                     <div className="footer">
