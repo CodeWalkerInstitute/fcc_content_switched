@@ -12,7 +12,9 @@ class App extends Component  {
            isMobile: true
        }
        this.logoCheck = this.logoCheck.bind(this)
+       this.fetchS3Content = this.fetchS3Content.bind(this)
    }
+
 
    componentDidMount(){
     this.props.media({ minWidth: 768 }, () => {
@@ -25,6 +27,8 @@ class App extends Component  {
           isMobile: true
         }, () => {console.log('is mobile?', this.state.isMobile)})
       })
+
+      this.fetchS3Content()
    }
 
    logoCheck(isVisible){
@@ -34,12 +38,32 @@ class App extends Component  {
         })
       }
    }
+
+   fetchS3Content(){
+      fetch('https://cors-anywhere.herokuapp.com/https://s3.amazonaws.com/demand-progress/stop-the-fcc.json')
+      .then(res => {
+        return res.json()
+      })
+      .then(content => {
+        let newState = Object.assign(this.state, content)
+        this.setState(newState)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+   }
    
     render(){
+      console.log(this.state)
         return(
             <div>
-                <Main logoCheck={this.logoCheck} isMobile={this.state.isMobile}/>
-                <Footer showLogos={this.state.showLogos} isMobile={this.state.isMobile}/>
+                <Main 
+                  logoCheck={this.logoCheck} 
+                  isMobile={this.state.isMobile}
+                  main={this.state.content}
+                  content={this.state.acf}
+                  />
+                <Footer content={this.state.acf} showLogos={this.state.showLogos} isMobile={this.state.isMobile}/>
             </div>
         )
     }
